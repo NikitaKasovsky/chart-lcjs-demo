@@ -1,4 +1,6 @@
-<app-filters></app-filters>
+<app-filters
+  (filtersData)="filtersValue($event)"
+></app-filters>
 
 <app-chart
   [chartData]="chartData"

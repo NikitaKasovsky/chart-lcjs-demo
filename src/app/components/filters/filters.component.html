@@ -1,55 +1,46 @@
-<form (submit)="submitForm()" [formGroup]="form">
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="symbol"
-  >
+<form [formGroup]="form" (submit)="submitForm()">
+  <mat-form-field appearance="outline">
     <mat-label>Symbol</mat-label>
-    <input matInput type="text" placeholder="Choose a symbol">
+    <input matInput formControlName="symbol" type="text" placeholder="Choose a symbol">
+    <mat-error *ngIf="form.controls.symbol.invalid">Field is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="otm"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>OTM</mat-label>
-    <input matInput type="text" placeholder="Choose a OTM">
+    <input matInput formControlName="otm" type="text" placeholder="Choose a OTM">
+    <mat-error *ngIf="form.controls.otm.invalid">Field is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="term"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Term</mat-label>
-    <input matInput type="text" placeholder="Choose a Term">
+    <input matInput formControlName="term" type="text" placeholder="Choose a Term">
+    <mat-error *ngIf="form.controls.term.invalid">Field is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="callPut"
-  >
-    <mat-label>Call&Put</mat-label>
-    <input matInput type="text" placeholder="Choose a ???">
+  <mat-form-field appearance="outline">
+    <mat-label>Option Type</mat-label>
+    <input matInput formControlName="optionType" type="text" placeholder="Choose a optionType">
+    <mat-error *ngIf="form.controls.optionType.invalid">Field is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="timeFrom"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Date-time from</mat-label>
-    <input matInput type="datetime-local" placeholder="Choose a date-time from">
+    <input matInput formControlName="fromTime" type="datetime-local" placeholder="Choose a date-time from">
+    <mat-error *ngIf="form.controls.fromTime.invalid">Field is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field
-    class="form-field"
-    appearance="fill"
-    formControlName="timeTo"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Date-time to</mat-label>
-    <input matInput type="datetime-local" placeholder="Choose a date-time to">
+    <input matInput formControlName="toTime" type="datetime-local" placeholder="Choose a date-time to">
+    <mat-error *ngIf="form.controls.toTime.invalid">Field is required</mat-error>
   </mat-form-field>
+
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="form.invalid"
+    (submit)="form"
+  >
+    Submit
+  </button>
 </form>

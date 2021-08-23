@@ -1,0 +1,10 @@
+[
+  {
+    "context": [
+      "/charts"
+    ],
+    "target": "http://192.168.25.247:8080",
+    "secure": false,
+    "timeout": 360000
+  }
+]

@@ -1,12 +1,12 @@
 import {
   Component,
   EventEmitter,
-  OnInit,
   Output
 } from '@angular/core';
 import {
   FormControl,
-  FormGroup
+  FormGroup,
+  Validators
 } from '@angular/forms';
 
 @Component({
@@ -16,19 +16,24 @@ import {
 })
 export class FiltersComponent {
 
-  constructor() { }
+  constructor(
+  ) {
+    setTimeout(() => {
+      this.form.markAllAsTouched();
+    }, 0)
+  }
 
   @Output()
   public filtersData = new EventEmitter<any>();
 
   public form: FormGroup = new FormGroup({
-    symbol: new FormControl(),
-    otm: new FormControl(),
-    term: new FormControl(),
-    callPut: new FormControl(),
+    symbol: new FormControl('SPX', Validators.required),
+    otm: new FormControl(0, Validators.required),
+    term: new FormControl(30, Validators.required),
+    optionType: new FormControl('C', Validators.required),
 
-    timeFrom: new FormControl(),
-    timeTo: new FormControl(),
+    fromTime: new FormControl(null, Validators.required),
+    toTime: new FormControl(null, Validators.required),
   })
 
   public submitForm(): void {

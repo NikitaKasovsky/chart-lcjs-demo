@@ -1,16 +1,17 @@
 :host {
   width: 100%;
   padding: 12px;
+  flex: 1;
 }
 
-.form-field {
-  padding: 6px;
+form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 
-.form-field:first-child {
-  padding-left: 0;
-}
-
-.form-field:last-child {
-  padding-right: 0;
+button,
+mat-form-field {
+  padding: 0 6px;
 }
