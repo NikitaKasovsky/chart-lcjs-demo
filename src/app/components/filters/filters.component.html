@@ -1,0 +1,55 @@
+<form (submit)="submitForm()" [formGroup]="form">
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="symbol"
+  >
+    <mat-label>Symbol</mat-label>
+    <input matInput type="text" placeholder="Choose a symbol">
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="otm"
+  >
+    <mat-label>OTM</mat-label>
+    <input matInput type="text" placeholder="Choose a OTM">
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="term"
+  >
+    <mat-label>Term</mat-label>
+    <input matInput type="text" placeholder="Choose a Term">
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="callPut"
+  >
+    <mat-label>Call&Put</mat-label>
+    <input matInput type="text" placeholder="Choose a ???">
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="timeFrom"
+  >
+    <mat-label>Date-time from</mat-label>
+    <input matInput type="datetime-local" placeholder="Choose a date-time from">
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-field"
+    appearance="fill"
+    formControlName="timeTo"
+  >
+    <mat-label>Date-time to</mat-label>
+    <input matInput type="datetime-local" placeholder="Choose a date-time to">
+  </mat-form-field>
+</form>

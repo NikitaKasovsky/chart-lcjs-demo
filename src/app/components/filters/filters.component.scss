@@ -1,0 +1,16 @@
+:host {
+  width: 100%;
+  padding: 12px;
+}
+
+.form-field {
+  padding: 6px;
+}
+
+.form-field:first-child {
+  padding-left: 0;
+}
+
+.form-field:last-child {
+  padding-right: 0;
+}
