@@ -19,9 +19,14 @@ export class AppComponent {
   public isLoading!: boolean;
 
   public filtersValue(event: IChartParams): void {
-    event.toTime = event.toTime.replace('T', ' ') + ':00';
-    event.fromTime = event.fromTime.replace('T', ' ') + ':00';
-    console.log(event)
+    if (!event.toTime.includes(':00')) {
+      event.toTime = event.toTime.replace('T', ' ') + ':00';
+    }
+
+    if (!event.fromTime.includes(':00')) {
+      event.fromTime = event.fromTime.replace('T', ' ') + ':00';
+    }
+
     this.loadChartData(event)
   }
 

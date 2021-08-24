@@ -36,12 +36,11 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   public ngAfterViewInit(): void {
     this.chart = lightningChart().ChartXY({container: `${this.chartId}`});
     this.chart.setTitle('IVLIVE CHARTS');
-    this.chart.getDefaultAxisX().setTickStrategy(AxisTickStrategies.Time);
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartData.currentValue) {
-      this.setPoints()
+    if (changes.chartData.previousValue !== changes.chartData.currentValue) {
+      this.setPoints();
     }
   }
 
@@ -50,27 +49,19 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setPoints(): void {
-    const series = this.chart.addLineSeries();
-    series.add(this.chartData.map((item: IChartResponse) => {
-      const res = {x: new Date(item.time).getTime() / 1000, y: +item.iv};
-      return res
-    }))
+    const originDate = this.chartData[0].time;
+    const points = this.chartData.map((item, index) => {
+      return {x: index, y: +item.iv}
+    });
+    this.chart.getDefaultAxisX().setTickStrategy(
+      AxisTickStrategies.DateTime,
+      (tickStrategy) => tickStrategy.setDateOrigin(new Date(originDate))
+    );
 
+    this.chart
+      .addLineSeries()
+      .setStrokeStyle(new SolidLine({thickness: 1, fillStyle: new SolidFill({color: ColorHEX('#F00')})}))
+      .add(points);
 
-    // const originDate = this.chartData[0].time;
-    // this.chart.getDefaultAxisX().setTickStrategy(
-    //   AxisTickStrategies.DateTime,
-    //   (tickStrategy) => tickStrategy.setDateOrigin(originDate)
-    // );
-
-
-
-    // const lineSeries = this.chart.addLineSeries();
-    // const points = this.chartData.map((item: IChartResponse) => {
-    //   return {x: item.time, y: item.iv}
-    // })
-    // lineSeries.setStrokeStyle(new SolidLine({ thickness: 1, fillStyle: new SolidFill({ color: ColorHEX('#F00') }) }));
-    // lineSeries.add(points);
   }
-
 }
