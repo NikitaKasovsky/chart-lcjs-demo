@@ -7,19 +7,31 @@
 
   <mat-form-field appearance="outline">
     <mat-label>OTM</mat-label>
-    <input matInput formControlName="otm" type="text" placeholder="Choose a OTM">
+    <mat-select formControlName="otm">
+      <mat-option *ngFor="let item of otm" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
     <mat-error *ngIf="form.controls.otm.invalid">Field is required</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Term</mat-label>
-    <input matInput formControlName="term" type="text" placeholder="Choose a Term">
+    <mat-select formControlName="term">
+      <mat-option *ngFor="let item of term" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
     <mat-error *ngIf="form.controls.term.invalid">Field is required</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Option Type</mat-label>
-    <input matInput formControlName="optionType" type="text" placeholder="Choose a optionType">
+    <mat-select formControlName="optionType">
+      <mat-option *ngFor="let item of optionType" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
     <mat-error *ngIf="form.controls.optionType.invalid">Field is required</mat-error>
   </mat-form-field>
 

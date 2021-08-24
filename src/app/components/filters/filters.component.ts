@@ -8,6 +8,11 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import {
+  optionType,
+  otm,
+  term
+} from '../../interfaces/http.interface';
 
 @Component({
   selector: 'app-filters',
@@ -25,6 +30,10 @@ export class FiltersComponent {
 
   @Output()
   public filtersData = new EventEmitter<any>();
+
+  public otm: otm[] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+  public term: term[] = [7, 14, 21, 30, 60, 90, 120, 150, 180, 270, 360, 720, 1080];
+  public optionType: optionType[] = ['C', 'P'];
 
   public form: FormGroup = new FormGroup({
     symbol: new FormControl('SPX', Validators.required),
