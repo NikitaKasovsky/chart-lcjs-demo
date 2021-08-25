@@ -17,6 +17,7 @@ export class AppComponent {
 
   public chartData: any;
   public isLoading!: boolean;
+  public currentSymbol!: string;
 
   public filtersValue(event: IChartParams): void {
     if (!event.toTime.includes(':00')) {
@@ -27,6 +28,7 @@ export class AppComponent {
       event.fromTime = event.fromTime.replace('T', ' ') + ':00';
     }
 
+    this.currentSymbol = event.symbol;
     this.loadChartData(event)
   }
 

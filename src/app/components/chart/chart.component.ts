@@ -11,7 +11,6 @@ import {
   ChartXY,
   ColorHEX,
   lightningChart,
-  Point,
   SolidFill,
   SolidLine
 } from '@arction/lcjs';
@@ -29,6 +28,10 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input()
   public chartData!: IChartResponse[];
+
+  @Input()
+  public symbol!: string;
+
   public chartId: number = Math.trunc(Math.random() * 1000000);
 
   private chart!: ChartXY;
@@ -39,7 +42,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartData.previousValue !== changes.chartData.currentValue) {
+    if (changes.chartData?.previousValue !== changes.chartData?.currentValue) {
       this.setPoints();
     }
   }
@@ -49,19 +52,25 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setPoints(): void {
-    const originDate = this.chartData[0].time;
-    const points = this.chartData.map((item, index) => {
-      return {x: index, y: +item.iv}
+    const originDate = new Date(this.chartData[0].time);
+
+    const points = this.chartData.map((item) => {
+      return {x: new Date(item.time).getTime() - originDate.getTime(), y: +item.iv}
     });
     this.chart.getDefaultAxisX().setTickStrategy(
       AxisTickStrategies.DateTime,
-      (tickStrategy) => tickStrategy.setDateOrigin(new Date(originDate))
+      (tickStrategy) => tickStrategy.setDateOrigin(originDate)
     );
 
     this.chart
       .addLineSeries()
-      .setStrokeStyle(new SolidLine({thickness: 1, fillStyle: new SolidFill({color: ColorHEX('#F00')})}))
-      .add(points);
-
+      .setStrokeStyle(new SolidLine({thickness: 2, fillStyle: new SolidFill({color: ColorHEX('#ffb700')})}))
+      .add(points)
+      .setCursorResultTableFormatter((builder, series, xValue, yValue) => {
+        return builder
+          .addRow(`Symbol: ${this.symbol}`)
+          .addRow(`Time: ${series.axisX.formatValue(xValue)}`)
+          .addRow(`IV: ${series.axisY.formatValue(yValue)}`)
+      });
   }
 }
