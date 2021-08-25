@@ -11,6 +11,7 @@ import {
   ChartXY,
   ColorHEX,
   lightningChart,
+  LineSeries,
   SolidFill,
   SolidLine
 } from '@arction/lcjs';
@@ -35,6 +36,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   public chartId: number = Math.trunc(Math.random() * 1000000);
 
   private chart!: ChartXY;
+  private lineSeries!: LineSeries;
 
   public ngAfterViewInit(): void {
     this.chart = lightningChart().ChartXY({container: `${this.chartId}`});
@@ -43,6 +45,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.chartData?.previousValue !== changes.chartData?.currentValue) {
+      this.lineSeries?.dispose();
       this.setPoints();
     }
   }
@@ -52,18 +55,24 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setPoints(): void {
-    const originDate = new Date(this.chartData[0].time);
+    const firstTimePoint = +new Date(this.chartData[0].time).getTime();
+    const timeZoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+    const NYTimeZoneOffset = 4 * 60 * 60 * 1000
+    const firstTimePointNYTimeZone = firstTimePoint + (timeZoneOffset - NYTimeZoneOffset);
+    const originDate = new Date(firstTimePointNYTimeZone);
 
     const points = this.chartData.map((item) => {
-      return {x: new Date(item.time).getTime() - originDate.getTime(), y: +item.iv}
+      return {x: (new Date(item.time).getTime() + (timeZoneOffset - NYTimeZoneOffset)) - firstTimePointNYTimeZone, y: +item.iv}
     });
     this.chart.getDefaultAxisX().setTickStrategy(
       AxisTickStrategies.DateTime,
-      (tickStrategy) => tickStrategy.setDateOrigin(originDate)
+      (tickStrategy) => tickStrategy.setDateOrigin(originDate).setLocale('en-US')
     );
 
-    this.chart
-      .addLineSeries()
+    this.lineSeries = this.chart
+        .addLineSeries();
+
+    this.lineSeries
       .setStrokeStyle(new SolidLine({thickness: 2, fillStyle: new SolidFill({color: ColorHEX('#ffb700')})}))
       .add(points)
       .setCursorResultTableFormatter((builder, series, xValue, yValue) => {
