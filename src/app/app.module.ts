@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -25,11 +25,20 @@ export class FiltersComponent {
   ) {
     setTimeout(() => {
       this.form.markAllAsTouched();
-    }, 0)
+    }, 0);
+
+    this.rtModeControl.valueChanges.subscribe((value: boolean) => this.rtMode.emit(value));
+    this.form.statusChanges.subscribe(status => {
+      if (status === 'INVALID') this.rtModeControl.disable()
+      if (status === 'VALID') this.rtModeControl.enable()
+    })
   }
 
   @Output()
   public filtersData = new EventEmitter<any>();
+
+  @Output()
+  public rtMode = new EventEmitter<any>();
 
   public otm: otm[] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
   public term: term[] = [7, 14, 21, 30, 60, 90, 120, 150, 180, 270, 360, 720, 1080];
@@ -44,6 +53,8 @@ export class FiltersComponent {
     fromTime: new FormControl(null, Validators.required),
     toTime: new FormControl(null, Validators.required),
   })
+
+  public rtModeControl = new FormControl({value: false, disabled: true});
 
   public submitForm(): void {
     this.filtersData.emit(this.form.value);

@@ -47,6 +47,8 @@
     <mat-error *ngIf="form.controls.toTime.invalid">Field is required</mat-error>
   </mat-form-field>
 
+  <mat-slide-toggle [formControl]="rtModeControl">RT Mode</mat-slide-toggle>
+
   <button
     mat-flat-button
     color="primary"
