@@ -55,18 +55,14 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setPoints(): void {
-    const firstTimePoint = +new Date(this.chartData[0].time).getTime();
-    const timeZoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
-    const NYTimeZoneOffset = 4 * 60 * 60 * 1000
-    const firstTimePointNYTimeZone = firstTimePoint + (timeZoneOffset - NYTimeZoneOffset);
-    const originDate = new Date(firstTimePointNYTimeZone);
+    const originDate = new Date(this.chartData[0].time);
 
     const points = this.chartData.map((item) => {
-      return {x: (new Date(item.time).getTime() + (timeZoneOffset - NYTimeZoneOffset)) - firstTimePointNYTimeZone, y: +item.iv}
+      return {x: new Date(item.time).getTime() - originDate.getTime(), y: +item.iv}
     });
     this.chart.getDefaultAxisX().setTickStrategy(
       AxisTickStrategies.DateTime,
-      (tickStrategy) => tickStrategy.setDateOrigin(originDate).setLocale('en-US')
+      (tickStrategy) => tickStrategy.setDateOrigin(originDate)
     );
 
     this.lineSeries = this.chart

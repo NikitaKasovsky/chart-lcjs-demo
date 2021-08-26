@@ -20,11 +20,11 @@ export class AppComponent {
   public currentSymbol!: string;
 
   public filtersValue(event: IChartParams): void {
-    if (!event.toTime.includes(':00')) {
+    if (event.toTime.includes('T')) {
       event.toTime = event.toTime.replace('T', ' ') + ':00';
     }
 
-    if (!event.fromTime.includes(':00')) {
+    if (event.fromTime.includes('T')) {
       event.fromTime = event.fromTime.replace('T', ' ') + ':00';
     }
 
