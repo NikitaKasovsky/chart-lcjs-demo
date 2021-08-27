@@ -29,8 +29,8 @@ export class FiltersComponent {
 
     this.rtModeControl.valueChanges.subscribe((value: boolean) => this.rtMode.emit(value));
     this.form.statusChanges.subscribe(status => {
-      if (status === 'INVALID') this.rtModeControl.disable()
-      if (status === 'VALID') this.rtModeControl.enable()
+      if (status === 'INVALID') this.rtModeControl.disable();
+      if (status === 'VALID') this.rtModeControl.enable();
     })
   }
 
@@ -58,6 +58,7 @@ export class FiltersComponent {
 
   public submitForm(): void {
     this.filtersData.emit(this.form.value);
+    this.form.markAsPristine();
+    this.rtModeControl.markAsPristine();
   }
-
 }

@@ -23,44 +23,52 @@ export class AppComponent implements OnDestroy {
   }
 
   public chartData: any;
+  public rtData: any;
   public isLoading!: boolean;
   public currentSymbol!: string;
 
-  private subscriptions!: Subscription;
-  private lastParams!: IChartParams;
+  private subscription!: Subscription;
+  private rtMode!: boolean;
 
   public ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public filtersValue(event: IChartParams): void {
     if (event.toTime.includes('T')) {
-      event.toTime = event.toTime.replace('T', ' ') + ':00';
+      event.toTime = AppComponent.formTimeField(event.toTime);
     }
 
     if (event.fromTime.includes('T')) {
-      event.fromTime = event.fromTime.replace('T', ' ') + ':00';
+      event.fromTime = AppComponent.formTimeField(event.fromTime);
     }
 
     this.currentSymbol = event.symbol;
-    this.lastParams = event;
-    this.loadChartData(event)
+
+    if (this.rtMode) {
+      this.loadChartData(event);
+      this.subscription = interval(10 * 1000)
+        .subscribe(() => {
+          this.requestService.getChart({
+            ...event,
+            fromTime: !this.rtData
+              ? AppComponent.formTimeField(this.chartData[this.chartData.length - 1].time).slice(0, -8)
+              : AppComponent.formTimeField(this.rtData[this.rtData.length - 1].time).slice(0, -8)
+          })
+            .subscribe(data => this.rtData = data)
+        });
+      return;
+    }
+
+    this.loadChartData(event);
   }
 
   public toggleRtMode(event: boolean): void {
-    console.log(event)
-    // if (event) {
-    //   this.subscriptions.add(interval(10 * 1000)
-    //     .subscribe(() => {
-    //       this.requestService.getChart({
-    //         ...this.lastParams,
-    //         // fromTime
-    //       })
-    //     })
-    //   );
-    // } else {
-    //   this.subscriptions.unsubscribe()
-    // }
+    this.rtMode = event;
+
+    if (!event && this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private loadChartData(params: IChartParams): void {
@@ -70,4 +78,7 @@ export class AppComponent implements OnDestroy {
       .subscribe(data => this.chartData = data)
   }
 
+  private static formTimeField(date: string): string {
+    return date.replace('T', ' ') + ':00';
+  }
 }

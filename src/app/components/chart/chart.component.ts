@@ -33,10 +33,14 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   public symbol!: string;
 
+  @Input()
+  public rtData!: IChartResponse[]
+
   public chartId: number = Math.trunc(Math.random() * 1000000);
 
   private chart!: ChartXY;
   private lineSeries!: LineSeries;
+  private originDate!: Date;
 
   public ngAfterViewInit(): void {
     this.chart = lightningChart().ChartXY({container: `${this.chartId}`});
@@ -48,6 +52,13 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.lineSeries?.dispose();
       this.setPoints();
     }
+
+    if (changes.rtData?.previousValue !== changes.rtData?.currentValue) {
+      const points = this.rtData.map((item) => {
+        return {x: new Date(item.time).getTime() - this.originDate.getTime(), y: +item.iv}
+      })
+      this.lineSeries.add(points)
+    }
   }
 
   public ngOnDestroy(): void {
@@ -55,14 +66,14 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setPoints(): void {
-    const originDate = new Date(this.chartData[0].time);
+    this.originDate = new Date(this.chartData[0].time);
 
     const points = this.chartData.map((item) => {
-      return {x: new Date(item.time).getTime() - originDate.getTime(), y: +item.iv}
+      return {x: new Date(item.time).getTime() - this.originDate.getTime(), y: +item.iv}
     });
     this.chart.getDefaultAxisX().setTickStrategy(
       AxisTickStrategies.DateTime,
-      (tickStrategy) => tickStrategy.setDateOrigin(originDate)
+      (tickStrategy) => tickStrategy.setDateOrigin(this.originDate)
     );
 
     this.lineSeries = this.chart
